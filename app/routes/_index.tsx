@@ -8,6 +8,7 @@ import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { readFile, writeFile } from "node:fs/promises";
 import { loadTodos } from "~/helpers/load.todos";
+import { useState } from "react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -45,6 +46,7 @@ export const loader: LoaderFunction = async () => {
 
 export default function Index() {
   const { orders, todos } = useLoaderData();
+  const [horas, setHoras] = useState([]);
   return (
     <>
       <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
@@ -60,9 +62,27 @@ export default function Index() {
             );
           })}
 
-          <h1>Todos</h1>
+          {/* <h1>Todos</h1>
           <div>Usuário: {todos.userId}</div>
-          <div>Título: {todos.title}</div>
+          <div>Título: {todos.title}</div> */}
+
+          {horas.map((hora) => {
+            return <div>{hora}</div>;
+          })}
+
+          <Button
+            onClick={() => {
+              const newHoras = structuredClone(horas);
+              newHoras.push(
+                String(
+                  `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`
+                )
+              );
+              setHoras(newHoras);
+            }}
+          >
+            Adicionar
+          </Button>
 
           <Form className="space-y-2" method="post">
             <Input placeholder="ID" required name="id" />
