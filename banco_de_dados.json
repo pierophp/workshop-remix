@@ -1,0 +1,16 @@
+{
+  "orders": [
+    {
+      "id": 1,
+      "customer": "Teste"
+    },
+    {
+      "id": 2,
+      "customer": "Teste 2"
+    },
+    {
+      "id": "3",
+      "customer": "Teste 3"
+    }
+  ]
+}
