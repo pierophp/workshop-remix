@@ -11,6 +11,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+generator kysely {
+  provider     = "prisma-kysely"
+  output       = "../app/db"
+  fileName     = "kysely.types.ts"
+  enumFileName = "kysely.enums.ts"
+}
+
 model User {
   id    Int     @id @default(autoincrement())
   email String  @unique

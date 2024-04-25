@@ -3,9 +3,14 @@ import type {
   LoaderFunction,
   MetaFunction,
 } from "@remix-run/cloudflare";
-import { Form } from "@remix-run/react";
+import { Form, redirect } from "@remix-run/react";
+import { Kysely } from "kysely";
+import { D1Dialect } from "kysely-d1";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
+import { getDb } from "~/db/get.db";
+import { DB } from "~/db/kysely.types";
+import { UserManager } from "~/db/user.manager";
 
 export const meta: MetaFunction = () => {
   return [
@@ -17,8 +22,18 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export const action: ActionFunction = async ({ request }) => {
-  return {};
+export const action: ActionFunction = async ({ request, context }) => {
+  const env = context.cloudflare.env as Env;
+
+  const body = await request.formData();
+
+  const userManager = new UserManager(getDb(env));
+  await userManager.insert({
+    name: body.get("name") as string,
+    email: body.get("email") as string,
+  });
+
+  return redirect("/");
 };
 
 export const loader: LoaderFunction = async () => {
@@ -33,13 +48,9 @@ export default function Index() {
           Bem-vindo ao Workshop!
         </h1>
         <div className="w-full max-w-sm space-y-2">
-          {/* <h1>Todos</h1>
-          <div>Usuário: {todos.userId}</div>
-         <div>Título: {todos.title}</div> */}
-
           <Form className="space-y-2" method="post">
-            <Input placeholder="ID" required name="id" />
-            <Input placeholder="Cliente" required name="customer" />
+            <Input placeholder="Nome" required name="name" />
+            <Input placeholder="E-mail" required name="email" type="email" />
             <Button className="w-full" type="submit">
               Sign Up
             </Button>
