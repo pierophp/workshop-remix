@@ -3,7 +3,7 @@
  * @see https://v0.dev/t/wQOhppNBkj2
  * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
  */
-import { Link } from "@remix-run/react";
+import { Link, redirect } from "@remix-run/react";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
 import {
@@ -22,6 +22,10 @@ import {
   DropdownMenuContent,
   DropdownMenu,
 } from "~/components/ui/dropdown-menu";
+
+export function action() {
+  return redirect();
+}
 
 export default function Component() {
   return (
