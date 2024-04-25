@@ -2,3 +2,7 @@
 binding = "DB"                                       # i.e. available in your Worker on env.DB
 database_name = "remix-workshop-02"
 database_id = "98785777-b8a6-4753-8e1c-f2beba333896"
+
+[[r2_buckets]]
+binding = 'BUCKET'             # <~ valid JavaScript variable name
+bucket_name = 'remix-workshop'
