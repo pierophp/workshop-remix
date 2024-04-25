@@ -22,9 +22,16 @@ import {
   DropdownMenuContent,
   DropdownMenu,
 } from "~/components/ui/dropdown-menu";
+import { LoaderFunctionArgs } from "@remix-run/cloudflare";
+import { getAuthenticator } from "~/services/auth.server";
 
-export function action() {
-  return redirect();
+export async function loader({ request, context }: LoaderFunctionArgs) {
+  // If the user is already authenticated redirect to /dashboard directly
+  let user = await getAuthenticator(context).isAuthenticated(request, {
+    failureRedirect: "/login",
+  });
+
+  return {};
 }
 
 export default function Component() {
