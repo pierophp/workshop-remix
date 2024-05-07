@@ -3,14 +3,12 @@ import type {
   LoaderFunction,
   MetaFunction,
 } from "@remix-run/cloudflare";
-import { Form, redirect } from "@remix-run/react";
-import { Kysely } from "kysely";
-import { D1Dialect } from "kysely-d1";
+import { Form, redirect, useLoaderData } from "@remix-run/react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { getDb } from "~/db/get.db";
-import { DB } from "~/db/kysely.types";
 import { UserManager } from "~/db/user.manager";
+import jwt from "@tsndr/cloudflare-worker-jwt";
 
 export const meta: MetaFunction = () => {
   return [
@@ -37,15 +35,24 @@ export const action: ActionFunction = async ({ request, context }) => {
 };
 
 export const loader: LoaderFunction = async () => {
-  return {};
+  const token = await jwt.sign(
+    { name: "John Doe", email: "john.doe@gmail.com" },
+    "secret"
+  );
+
+  console.log({ token });
+
+  return { token };
 };
 
 export default function Index() {
+  const { token } = useLoaderData();
+
   return (
     <>
       <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
         <h1 className="text-3xl font-bold text-blue-500">
-          Bem-vindo ao Workshop!
+          Bem-vindo ao Workshop! -
         </h1>
         <div className="w-full max-w-sm space-y-2">
           <Form className="space-y-2" method="post">
@@ -56,6 +63,8 @@ export default function Index() {
             </Button>
           </Form>
         </div>
+
+        <div>TOKEN: {token}</div>
       </div>
     </>
   );
